@@ -2,19 +2,19 @@
 
 // @input Component.ScriptComponent carousel
 // @input Component.Text countdown
-// @input Component.MeshVisual note5dot
-// @input Component.MeshVisual note6dot
-// @input Component.MeshVisual note7dot
-// @input Component.MeshVisual note1
-// @input Component.MeshVisual note2
-// @input Component.MeshVisual note3
-// @input Component.MeshVisual note4
-// @input Component.MeshVisual note5
-// @input Component.MeshVisual note6
-// @input Component.MeshVisual note7
-// @input Component.MeshVisual note1dot
+// @input SceneObject notes
 // @input Component.ScriptComponent notecontrol
 
+//Make sure you order your notes in Notes from lowest (top) to highest (bottom)
+var notes = [];
+print(script.notes.getChildrenCount())
+for(var i = 0; i < script.notes.getChildrenCount(); i++) {
+    var note = script.notes.getChild(i)
+    if(note.name != "Occluder") {
+        notes[i] = script.notes.getChild(i).getComponent("Component.BaseMeshVisual")
+    }
+}
+print(notes[0])
 var song;
 // How to create a song:
 // Create an array of arrays with each array following the following format
@@ -24,9 +24,7 @@ var song;
 // While non-traditional, this makes a quarter note .25 which is easier to read
 var scale = [
     120,
-  [0.5, 1],
-  [0.6, 1],
-  [0.7, 1],
+  [0, 1],
   [1, 1],
   [2, 1],
   [3, 1],
@@ -34,87 +32,89 @@ var scale = [
   [5, 1],
   [6, 1],
   [7, 1],
-  [0.1, 1]];
+  [8, 1],
+  [9, 1],
+  [10, 1]];
 var happy_birthday = [
     120,
-  [0.5, 0.125],
-  [0.5, 0.125],
-  [0.6, 0.25],
-  [0.5, 0.25],
-  [1, 0.5],
-  [0.7, 0.25],
-
-  [0.5, 0.125],
-  [0.5, 0.125],
-  [0.6, 0.25],
-  [0.5, 0.25],
-  [2, 0.5],
+  [0, 0.125],
+  [0, 0.125],
   [1, 0.25],
+  [0, 0.25],
+  [3, 0.5],
+  [2, 0.25],
 
-  [0.5, 0.125],
-  [0.5, 0.125],
+  [0, 0.125],
+  [0, 0.125],
+  [1, 0.25],
+  [0, 0.25],
+  [4, 0.5],
+  [3, 0.25],
+
+  [0, 0.125],
+  [0, 0.125],
+  [7, 0.25],
   [5, 0.25],
   [3, 0.25],
-  [1, 0.25],
-  [0.7, 0.25],
-  [0.6, 0.25],
-
-  [4, 0.125],
-  [4, 0.125],
-  [3, 0.25],
-  [1, 0.25],
   [2, 0.25],
-  [0.7, 1],
+  [1, 0.25],
+
+  [6, 0.125],
+  [6, 0.125],
+  [5, 0.25],
+  [3, 0.25],
+  [4, 0.25],
+  [3, 1],
 ];
 var twinkle_tinkle = [
     120,
-  [1, .25],
-  [1, .25],
-  [5, .25],
-  [5, .25],
+  [3, .25],
+  [3, .25],
+  [7, .25],
+  [7, .25],
+  [8, .25],
+  [8, .25],
+  [7, .5],
+
   [6, .25],
   [6, .25],
-  [5, .5],
+  [5, .25],
+  [5, .25],
+  [4, .25],
+  [4, .25],
+  [3, .25],
 
-  [4, .25],
-  [4, .25],
-  [3, .25],
-  [3, .25],
-  [2, .25],
-  [2, .25],
-  [1, .25],
-
-  [5, .25],
-  [5, .25],
-  [4, .25],
-  [4, .25],
-  [3, .25],
-  [3, .25],
-  [2, .5],
-
-  [5, .25],
-  [5, .25],
-  [4, .25],
-  [4, .25],
-  [3, .25],
-  [3, .25],
-  [2, .5],
-
-  [1, .25],
-  [1, .25],
-  [5, .25],
-  [5, .25],
+  [7, .25],
+  [7, .25],
   [6, .25],
   [6, .25],
-  [5, .5],
+  [5, .25],
+  [5, .25],
+  [4, .5],
 
-  [4, .25],
-  [4, .25],
+  [7, .25],
+  [7, .25],
+  [6, .25],
+  [6, .25],
+  [5, .25],
+  [5, .25],
+  [4, .5],
+
   [3, .25],
   [3, .25],
-  [2, .25],
-  [2, .25],
-  [1, .5],
+  [7, .25],
+  [7, .25],
+  [8, .25],
+  [8, .25],
+  [7, .5],
+
+  [6, .25],
+  [6, .25],
+  [5, .25],
+  [5, .25],
+  [4, .25],
+  [4, .25],
+  [3, .5],
 ];
 
 var i = 0;
@@ -128,17 +128,9 @@ function FadeOut() {
 
   if (start_tran > 0.0) {
     start_tran -= 0.005;
-    script.note5dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note6dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note7dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note1.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note2.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note3.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note4.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note5.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note6.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note7.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note1dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
+    for(var i = 0; i < notes.length; i++){
+        notes[i].mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
+    }
   } else {
     event.enabled = false;
     script.countdown.text = "";
@@ -151,17 +143,9 @@ function FadeIn() {
   //Control the countdown
   if (start_tran < 1.0) {
     start_tran += 0.05;
-    script.note5dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note6dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note7dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note1.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note2.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note3.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note4.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note5.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note6.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note7.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
-    script.note1dot.mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
+    for(var i = 0; i < notes.length; i++){
+        notes[i].mainPass.baseColor = new vec4(0.0, 1.0, 0.0, start_tran);
+    }
   } else {
     event.enabled = false;
     script.carousel.api.setIndex();
@@ -188,29 +172,7 @@ script.api.Init = function () {
     
   if (i < song.length) {
     for (var j = 0; j < song[i].length - 1; j++) {
-      if (song[i][j] == 1) {
-        script.api.note.push(script.note1);
-      } else if (song[i][j] == 2) {
-        script.api.note.push(script.note2);
-      } else if (song[i][j] == 3) {
-        script.api.note.push(script.note3);
-      } else if (song[i][j] == 4) {
-        script.api.note.push(script.note4);
-      } else if (song[i][j] == 5) {
-        script.api.note.push(script.note5);
-      } else if (song[i][j] == 6) {
-        script.api.note.push(script.note6);
-      } else if (song[i][j] == 7) {
-        script.api.note.push(script.note7);
-      } else if (song[i][j] == 0.5) {
-        script.api.note.push(script.note5dot);
-      } else if (song[i][j] == 0.6) {
-        script.api.note.push(script.note6dot);
-      } else if (song[i][j] == 0.7) {
-        script.api.note.push(script.note7dot);
-      } else if (song[i][j] == 0.1) {
-        script.api.note.push(script.note1dot);
-      }
+      script.api.note.push(notes[song[i][j]]);
     }
     script.api.beat = song[i][song[i].length - 1];
     i += 1;

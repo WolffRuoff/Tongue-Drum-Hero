@@ -1,10 +1,10 @@
-# HeARo Framework
+# Tongue Drum Hero - An Implementation of the HeARo Framework
 By Ethan Ruoff (Team Tongue Drum Hero | er3074)
 Submitted December 22nd, 2021
 
-Developed on Lens Studio by Snap Inc. for the Next Generation (2021) Spectacles
+Developed on Lens Studio by Snap Inc. for the Next Generation (2021) Spectacles. If you would like to implement the HeARo framework, please scroll down to the "Implementing The HeARo Framework on your own instrument" section.
 
-A demo of Tongue Drum Hero is viewable at ___
+A demo of Tongue Drum Hero is viewable at [https://youtu.be/3BcJqnj3xVg](https://youtu.be/3BcJqnj3xVg).
 
 ## Directory Overview
 This repo is structured like a standard Lens Studio project with all of the resources in the "Public" folder. The root directory contains the following files:
@@ -55,3 +55,28 @@ There are currently only two known bugs in Tongue Drum Hero that are both result
 
 ## Asset Sources
 I made all of the assets in this project except for the magnifying glass hint icon which way made by Snap Inc.
+
+
+
+# Implementing The HeARo Framework on your own instrument
+The HeARo framework consists of multiple steps that allow a developer to create a unique marker, note layout, write numerous songs, and create multiple difficulties in their very own Snapchat lens. While HeARo is free to use and implement, we please ask that you credit HeARo and Ethan Ruoff.
+
+## Create a Unique Marker
+The first step of implementing the HeARo framework is to create a unique marker for the project. This marker is used as a reference point for tracking the instrument and where the notes should be. Since the Next Generation (2021) Spectacles have a very wide field of view, it is important to make the printed version of the marker as large as possible so that it can be easily recognized. Other best practices are to make the marker high contrast and asymmetrical so that the program can easily recognize it.
+
+Once you have created a marker with a smaller resolution than 2048x2048 pixels, add the image to the “Markers” folder in Resources. From there, click the plus icon to add a new “Image Marker” resource. When it prompts you to select an image, choose the new marker you just added to your resources. Lastly, navigate to “Camera/Image Marker” in your scene and make the Marker Tracking component reference the Image Marker you just created.
+While this has caused the notes to use the new marker for tracking, the hint is still referencing the older marker’s image. To fix this, navigate to “Orthographic Camera/Magnifying Hint” and update the Preview Texture in the script component to reference your new image.
+
+## Note Layout
+HeARo allows the developer to place as few or as many notes as they want wherever they want on/around an instrument.  Each note is represented by a sphere mesh with a unique green material. When it becomes time for a user to play a note, the corresponding sphere will gradually change from green to red. These notes are mapped to a tracked marker that must be placed near the instrument. Please note that Tongue Drum Hero includes an optional occluder to make it appear that the notes are coming out of the drum.
+
+By default, HeARo is configured to use 11 notes. To add or remove notes, simply duplicate or delete notes in the scene under “Camera/Image Marker/Notes.” I strongly recommend ordering these with the lowest note at the top and the highest note at the bottom to make song writing as intuitive as possible. If you are adding new notes via duplication, for each new note added, duplicate the corresponding material in “Materials/Notes” and assign the new SceneObject’s “Material 1” parameter to the new material. Once you have decided upon the number of notes to use, lay them out using the transform component in the Scene editor. This step may take a lot of trial and error to get correct but is definitely worth the effort since one little mistake here could ruin the experience for users. You can additionally edit the Occluder SceneObject to be the same shape as your instrument to add additional realism to HeARo. If you don’t choose to do this, then disable or delete the Occluder object.
+
+## Song Writing
+Once the notes are laid out, developers can start writing songs. Songs are written in the ColorChange script and are composed of an array of arrays, with the first value being an integer that represents the beats per minute. Each inner array is composed of the notes and a length with a length of one equaling a whole note in the 4/4 time signature.  For the note values, zero represents the lowest note with the pitch subsequently increasing alongside the note value.
+
+## Song and Difficulty Selection
+The next step is to set up the two menus: the song selection and difficulty selection menus. These menus are modified versions of the 3D UI Carousel asset [2] provided by Snapchat and can be navigated by swiping and tapping on the touch panel on the right side of the Spectacles. The menus are modified to disappear after selection and reappear at the end of each song. As the name implies, the song selection menu is used to select the previously created songs, whereas the difficulty menu is used to choose the difficulty. The developer can modify the difficulty options, but there are only two options by default: real-time and practice. The real-time difficulty plays the song in real-time, while the practice mode doubles the time of each note to allow the user to have more time.
+
+To edit either of these menus, navigate to “UI Camera” and expand the carousel and SceneObject that you hope to edit. Once expanded, add as many objects as you would like to have options. For each different object from the default, create an icon in “3D Carousel Resources/Icons,” create a corresponding material in “3D Carousel Resources/Materials,” and update the “Material 1” parameter for that object with the material you just made. Once you have fully updated the frontend portion of the selection menus, open the ColorChange script and navigate to the “script.api.setIndex” function. In this function, edit the two ternary operators to correspond with the indexes of the icons. For the difficulty variable, the higher the value assigned, the slower the song. For example, a value of one is real-time, two is half as fast, etc. 
+

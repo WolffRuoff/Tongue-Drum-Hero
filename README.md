@@ -8,6 +8,7 @@ A demo of Tongue Drum Hero is viewable at [https://youtu.be/3BcJqnj3xVg](https:/
 
 ## Directory Overview
 This repo is structured like a standard Lens Studio project with all of the resources in the "Public" folder. The root directory contains the following files:
+- Abstract.pdf : The two page abstract
 - icon.png : The icon for the lens when it is published
 - Previews folder : This folder contains all of the custom previews that you want to use in the simulation panel.
 - project.data : Stores the data for the project. Do NOT edit.
@@ -29,6 +30,8 @@ This repo is structured like a standard Lens Studio project with all of the reso
 - README.md : This file
 - Snapcode.png : The snapcode that you can scan to use this lens.
 - Tongue Drum Hero.lsproj : The project file for Tongue Drum Hero. Open this file to edit the project.
+- Website Blurb.pdf : A blurb and screenshot for the COMS6998 website
+- Written Description.pdf : An extended version of the abstract that includes extensive details on how to implement the HeARo framework
  
 ## How to Deploy Tongue Drum Hero
 You can access Tongue Drum Hero by clicking [here](https://lens.snapchat.com/1a64020ee09343d7ae3aebe547a2e5d0?sender_web_id=f95da986-49ee-4ea2-a393-a23c957f7305&device_type=desktop&is_copy_url=true) or scanning this Snapcode:
@@ -52,6 +55,8 @@ There are many ways in which the HeARo framework can be further developed. One s
 
 ## Current Bugs
 There are currently only two known bugs in Tongue Drum Hero that are both results of Lens Studio and the Spectacles. The first one is that when you move your head quickly as the marker is first discovered the notes will be significantly off. This is because the extended marker tracking only uses the first frame of the marker tracking while the marker tracking itself requires multiple frames to calibrate itself if the glasses are quickly moving. The second bug is that the extended marker tracking sometimes causes the notes to drift overtime. Both of these bugs can be fixed by simply restarting the lens.
+
+In Lens Studio there is another bug in the preview mode that makes the notes static and not track with the video preview used. This bug persists only in Lens Studio and goes away when the lens is loaded to the Spectacles.
 
 ## Asset Sources
 I made all of the assets in this project except for the magnifying glass hint icon which way made by Snap Inc.

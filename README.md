@@ -1,6 +1,5 @@
 # Tongue Drum Hero - An Implementation of the HeARo Framework
-By Ethan Ruoff (Team Tongue Drum Hero | er3074)
-Submitted December 22nd, 2021
+By Ethan Ruoff
 
 Developed on Lens Studio by Snap Inc. for the Next Generation (2021) Spectacles. If you would like to implement the HeARo framework, please scroll down to the "Implementing The HeARo Framework on your own instrument" section.
 
